@@ -363,6 +363,9 @@ struct StateMessage2 {
     /// @brief True if system fan is running, false if off
     bool fanActive;
 
+	double outsideTemperature;  // °C William
+
+
     /// @brief print state to printOut
     void print();
 

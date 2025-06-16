@@ -754,6 +754,10 @@ void StateMessage2::print() {
         printOut->print(":");
         printOut->print((zoneOn[i] ? "On" : "Off"));
     }
+	
+	Serial.print("Outside Temp: ");  // william
+    Serial.println(outsideTemperature);  // william
+
 }
 
 void StateMessage2::parse(uint8_t data[StateMessage::stateMessageLength]) {
@@ -811,6 +815,10 @@ void StateMessage2::parse(uint8_t data[StateMessage::stateMessageLength]) {
             compressorMode = CompressorMode::Unknown;
             break;       
     }
+	    // william: decode outside temperature
+    int16_t rawOutside = (data[16] << 8) | data[17];  // william
+    outsideTemperature = rawOutside / 10.0;          // william
+
 }
 
 ///////////////////////////////////
