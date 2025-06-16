@@ -412,6 +412,19 @@ namespace Actron485 {
                         break;
                     case MessageType::IndoorBoard2:
                         changed = copyBytes(_serialBuffer, stateMessage2Raw, stateMessage2.stateMessageLength);
+                        if (printOut) {
+                            printOut->println("IndoorBoard2 raw data:");
+                            for (int i = 0; i < stateMessage2.stateMessageLength; i++) {
+                                if (i < 10) printOut->print("0"); // leading zero for consistency
+                                printOut->print(i);
+                                printOut->print(": ");
+                                printOut->print(_serialBuffer[i], HEX);
+                                printOut->print("    ");
+                                if ((i + 1) % 4 == 0) printOut->println();  // print 4 bytes per line
+                            }
+                            printOut->println();
+                        }
+
                         stateMessage2.parse(_serialBuffer);
                         statusLastReceivedTime = now;
 
