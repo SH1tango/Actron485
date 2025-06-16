@@ -760,6 +760,9 @@ void StateMessage2::print() {
     ESP_LOGD("StateMessage2", "Outside Temp: %.1f°C", outsideTemperature); // william
     ESP_LOGD("StateMessage2", "Inside Temp: %.1f°C", inside_temp_c); // william
 
+    printOut->print(", Outside Temp: ");
+    printOut->print(outsideTemperature, 1);
+
 
 }
 
@@ -827,7 +830,9 @@ void StateMessage2::parse(uint8_t data[StateMessage::stateMessageLength]) {
     }
 	    // william: decode outside temperature
     int16_t rawOutside = (data[16] << 8) | data[17];  // william
-    outsideTemperature = rawOutside / 10.0;          // william
+    // Parse outside air temperature from bytes 13 and 14
+    uint16_t rawOutsideTemp = ((uint16_t)data[13] << 8) | data[14];
+    outsideTemperature = rawOutsideTemp * 0.1;
 
 }
 
