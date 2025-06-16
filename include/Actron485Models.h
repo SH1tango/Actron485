@@ -364,6 +364,8 @@ struct StateMessage2 {
     bool fanActive;
 
 	double outsideTemperature;  // °C William
+    float inside_temp_c = 0.0;  // william
+    float outside_temp_c = 0.0; // william
 
 
     /// @brief print state to printOut

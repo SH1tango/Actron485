@@ -1,5 +1,7 @@
 #include "Actron485Models.h"
 #include "Utilities.h"
+#include "esp_log.h" // william
+
 
 namespace Actron485 {
 
@@ -755,8 +757,9 @@ void StateMessage2::print() {
         printOut->print((zoneOn[i] ? "On" : "Off"));
     }
 	
-	Serial.print("Outside Temp: ");  // william
-    Serial.println(outsideTemperature);  // william
+    ESP_LOGD("StateMessage2", "Outside Temp: %.1f°C", outsideTemperature); // william
+    ESP_LOGD("StateMessage2", "Inside Temp: %.1f°C", inside_temp_c); // william
+
 
 }
 
@@ -770,7 +773,14 @@ void StateMessage2::parse(uint8_t data[StateMessage::stateMessageLength]) {
     setpoint = (double)data[4] / 2.0;
 
     temperature = ((double) (((uint16_t)data[9] << 8) | data[10])) / 10.0;
-    
+
+    uint16_t inside_temp_raw = (data[2] << 8) | data[3];  // william
+    uint16_t outside_temp_raw = (data[4] << 8) | data[5]; // william
+
+    inside_temp_c = (inside_temp_raw - 1130) / 10.0f;  // 1130 offset = 0.0°C // william
+    outside_temp_c = (outside_temp_raw - 1130) / 10.0f; // william
+
+
     uint8_t fanModeRaw = (data[05] & 0b111100) >> 2;
     switch (fanModeRaw) {
         case 0b0000:
